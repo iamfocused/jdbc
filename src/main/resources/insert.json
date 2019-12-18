@@ -1,0 +1,14 @@
+{
+  "tableName":"PRODUCTION_PROCESS",
+  "type":0,
+  "details":
+  [
+    {
+      "insert":{"SUP_PROC_INST_":"11","CODE_":"2"}
+    },
+    {
+      "insert": {"SUP_PROC_INST_":"11","CODE_":"1"}
+    }
+  ]
+
+}

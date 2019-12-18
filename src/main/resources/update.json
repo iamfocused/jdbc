@@ -1,0 +1,16 @@
+{
+  "tableName":"PRODUCTION_PROCESS",
+  "type":1,
+  "details":
+  [
+    {
+      "update": {"ORDER_QTY_": 122, "TYPE_": "AAA"},
+      "where":{"SUP_PROC_INST_":"11","CODE_":"2"}
+    },
+    {
+      "update": {"ORDER_QTY_": 2, "TYPE_": "BBB"},
+      "where":{"SUP_PROC_INST_":"11","CODE_":"1"}
+    }
+  ]
+
+}
