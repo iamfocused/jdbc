@@ -99,11 +99,10 @@ public class JdbcUtils {
             }
             List<String> fields = new ArrayList<>(jdbcOperationInfo.getDetails().get(0).getUpdate().keySet());
             List<String> conditions = new ArrayList<>(jdbcOperationInfo.getDetails().get(0).getWhere().keySet());
-            String sql = constructUpdateSql(fields, conditions);
+            String sql = constructUpdateSql(fields, conditions, jdbcOperationInfo.getTableName());
             connection = getConnection();
             connection.setAutoCommit(false);
             preparedStatement = connection.prepareStatement(sql);
-
             List<SqlInfo> details = jdbcOperationInfo.getDetails();
 
             int count = 0;
@@ -146,11 +145,11 @@ public class JdbcUtils {
         return result;
     }
 
-    private static String constructUpdateSql(List<String> fields, List<String> conditions) {
-        fields.removeAll(conditions);
+    private static String constructUpdateSql(List<String> fields, List<String> conditions, String tableName) {
+//        fields.removeAll(conditions);
         String fs = String.join("=?,", fields) + "=?";
         String con = String.join("=? and ", conditions) + "=?";
-        return "UPDATE PRODUCTION_PROCESS SET " + fs + " WHERE " + con;
+        return "UPDATE "+ tableName +" SET " + fs + " WHERE " + con;
     }
 
     private static boolean errorData(JdbcOperationInfo jdbcOperationInfo) {

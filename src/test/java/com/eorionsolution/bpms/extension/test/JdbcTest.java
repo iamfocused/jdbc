@@ -7,29 +7,27 @@ import org.junit.Test;
 import java.util.*;
 import java.util.stream.Collectors;
 
-import static org.junit.Assert.*;
 
 public class JdbcTest {
     @Test
     @Ignore
     public void testInsert() {
        String jsonString = "{\n" +
-               "  \"tableName\":\"PRODUCTION_PROCESS\",\n" +
-               "  \"type\":1,\n" +
-               "  \"details\":\n" +
-               "  [\n" +
-               "    {\n" +
-               "      \"update\": {\"ORDER_QTY_1\": 122, \"TYPE_\": \"AAA\"},\n" +
-               "      \"where\":{\"SUP_PROC_INST_\":\"11\",\"CODE_\":\"2\"}\n" +
-               "    },\n" +
-               "    {\n" +
-               "      \"update\": {\"ORDER_QTY_\": 2, \"TYPE_\": \"BBB\"},\n" +
-               "      \"where\":{\"SUP_PROC_INST_\":\"11\",\"CODE_\":\"1\"}\n" +
-               "    }\n" +
-               "  ]\n" +
-               "\n" +
+               "    \"tableName\":\"DP_LEAVE_RECORDS_\",\n" +
+               "    \"type\":1,\n" +
+               "    \"details\":[\n" +
+               "        {\n" +
+               "            \"update\":{\n" +
+               "                \"ENABLE_\":true" +
+               "            },\n" +
+               "            \"where\":{\n" +
+               "            \t\"PROC_INST_ID_\":\"524807\", \"ENABLE_\": false, \"SN_\":\"100011\"\n" +
+               "            }\n" +
+               "        }\n" +
+               "    ]\n" +
                "}";
-       assertEquals(401, JdbcUtils.batchUpdate(jsonString));
+//        JdbcUtils.batchInsert(jsonString);
+        JdbcUtils.batchUpdate(jsonString);
     }
 
     @Test
@@ -39,6 +37,5 @@ public class JdbcTest {
         list.add(Arrays.asList("4", "5", "6"));
         list.add(Arrays.asList("7", "8", "9"));
         List<String> result = list.parallelStream().flatMap(List::stream).filter(it -> !it.equals("5")).collect(Collectors.toList());
-        System.out.println(result);
     }
 }
