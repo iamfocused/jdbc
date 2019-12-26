@@ -12,18 +12,19 @@ import java.util.stream.Collectors;
 
 public class JdbcUtils {
     private static final int batchSize = 100;
-    private static Connection connection;
-    private static PreparedStatement preparedStatement;
 
     private static final ObjectMapper objectMapper = new ObjectMapper();
 
+    private static HikariDataSource dataSource ;
+
     private static Connection getConnection() throws SQLException {
-        HikariConfig hikariConfig = new HikariConfig("/jdbc.properties");
-        HikariDataSource dataSource = new HikariDataSource(hikariConfig);
+        if (dataSource == null) {
+            dataSource = new HikariDataSource(new HikariConfig("/jdbc.properties"));
+        }
         return dataSource.getConnection();
     }
 
-    private static void closeAll() throws SQLException {
+    private static void closeAll(Connection connection, PreparedStatement preparedStatement) throws SQLException {
         if (preparedStatement != null) {
             preparedStatement.close();
         }
@@ -34,6 +35,8 @@ public class JdbcUtils {
 
     public static int batchInsert(String jsonData) {
         int result = 200;
+        Connection connection = null;
+        PreparedStatement preparedStatement = null;
         try {
             JdbcOperationInfo jdbcOperationInfo = objectMapper.readValue(jsonData, JdbcOperationInfo.class);
             Integer t = Optional.of(jdbcOperationInfo).map(JdbcOperationInfo::getType).orElse(-1);
@@ -69,13 +72,14 @@ public class JdbcUtils {
             e.printStackTrace();
             result = 402;
             try {
-                connection.rollback();
+                if (connection != null)
+                    connection.rollback();
             } catch (SQLException ex) {
                 ex.printStackTrace();
             }
         } finally {
             try {
-                closeAll();
+                closeAll(connection, preparedStatement);
             } catch (SQLException e) {
                 e.printStackTrace();
             }
@@ -91,6 +95,8 @@ public class JdbcUtils {
 
     public static int batchUpdate(String jsonData) {
         int result = 200;
+        Connection connection = null;
+        PreparedStatement preparedStatement = null;
         try {
             JdbcOperationInfo jdbcOperationInfo = objectMapper.readValue(jsonData, JdbcOperationInfo.class);
             Integer t = Optional.of(jdbcOperationInfo).map(JdbcOperationInfo::getType).orElse(-1);
@@ -131,13 +137,14 @@ public class JdbcUtils {
             e.printStackTrace();
             result = 402;
             try {
-                connection.rollback();
+                if (connection != null)
+                    connection.rollback();
             } catch (SQLException ex) {
                 ex.printStackTrace();
             }
         } finally {
             try {
-                closeAll();
+                closeAll(connection, preparedStatement);
             } catch (SQLException e) {
                 e.printStackTrace();
             }
