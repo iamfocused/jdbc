@@ -19,7 +19,7 @@ JdbsUtils.batchUpdate(updateJson)
 ```    
 
 insert json    
-```json
+```
 {
   "tableName":"tableName",
   "type":0,
@@ -36,7 +36,7 @@ insert json
 }
 ```    
 update json
-```json
+```
 {
   "tableName":"tableName",
   "type":1,
